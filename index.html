@@ -212,8 +212,8 @@
 
     .header-copy p {
       margin: 8px 0 0;
-      max-width: 58ch;
-      color: var(--text-2);
+      max-width: 50ch;
+      color: rgba(234, 240, 255, 0.68);
       line-height: 1.45;
       font-size: 0.98rem;
     }
@@ -237,7 +237,9 @@
 
     .quiet-badge {
       margin-top: 4px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      background: rgba(255,255,255,0.04);
+      border-color: rgba(255,255,255,0.08);
+      color: var(--text-3);
     }
 
     .video-hero {
@@ -259,6 +261,7 @@
       aspect-ratio: 16 / 9;
       min-height: 260px;
       isolation: isolate;
+      transition: border-color 180ms ease, box-shadow 220ms ease, transform 220ms ease;
     }
 
     .video-surface::before {
@@ -285,6 +288,16 @@
       border: 0;
       background: transparent;
       cursor: pointer;
+    }
+
+    .video-surface.is-loaded:hover {
+      border-color: rgba(96, 231, 255, 0.18);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.46), 0 0 0 1px rgba(96, 231, 255, 0.08), 0 0 44px rgba(124, 92, 255, 0.14);
+      transform: translateY(-1px);
+    }
+
+    .video-surface.is-playing {
+      box-shadow: 0 32px 74px rgba(0, 0, 0, 0.48), 0 0 0 1px rgba(96, 231, 255, 0.09), 0 0 54px rgba(96, 231, 255, 0.12);
     }
 
     .video-tap-layer:disabled {
@@ -522,7 +535,7 @@
     }
 
     .controls-panel.is-disabled {
-      opacity: 0.62;
+      opacity: 0.72;
     }
 
     .video-info-inline {
@@ -714,6 +727,19 @@
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
     }
 
+    .control-btn:disabled,
+    .primary-btn:disabled,
+    .utility-btn:disabled,
+    .add-btn:disabled,
+    .ghost-btn:disabled,
+    .mini-btn:disabled,
+    .speed-select:disabled,
+    .volume-group:has(.utility-btn:disabled) {
+      opacity: 0.58;
+      box-shadow: none;
+      border-color: rgba(255,255,255,0.08);
+    }
+
     .control-btn:hover,
     .utility-btn:hover,
     .add-btn:hover,
@@ -726,14 +752,14 @@
     }
 
     .primary-btn {
-      min-width: 56px;
-      height: 56px;
-      border-radius: 18px;
-      padding: 0 16px;
+      min-width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      padding: 0 18px;
       background: linear-gradient(135deg, rgba(124, 92, 255, 0.88), rgba(47, 214, 255, 0.82));
       color: #09101b;
       border-color: rgba(255,255,255,0.18);
-      box-shadow: 0 18px 34px rgba(18, 22, 38, 0.34), 0 0 28px rgba(96, 231, 255, 0.2);
+      box-shadow: 0 22px 38px rgba(18, 22, 38, 0.36), 0 0 30px rgba(96, 231, 255, 0.22);
       font-weight: 800;
     }
 
@@ -783,7 +809,13 @@
       padding: 0 14px;
       border: 1px solid rgba(255,255,255,0.12);
       background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+      background-color: #141b2f;
       color: var(--text);
+    }
+
+    .speed-select option {
+      background: #141b2f;
+      color: #f7f9ff;
     }
 
     .queue-panel {
@@ -913,31 +945,54 @@
     .queue-item {
       width: 100%;
       display: grid;
-      grid-template-columns: 44px minmax(0, 1fr) auto;
-      gap: 12px;
+      grid-template-columns: 48px minmax(0, 1fr) auto;
+      gap: 14px;
       align-items: center;
-      padding: 12px;
+      padding: 13px 14px;
       border-radius: 18px;
       border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.03);
+      background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02));
       text-align: left;
       min-width: 0;
+      position: relative;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 180ms ease;
     }
 
     .queue-item:hover {
+      transform: translateY(-1px);
       background: rgba(255,255,255,0.05);
       border-color: rgba(255,255,255,0.14);
     }
 
+    .queue-item::before {
+      content: "";
+      position: absolute;
+      left: 8px;
+      top: 50%;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: transparent;
+      transform: translateY(-50%);
+      transition: background 160ms ease, box-shadow 160ms ease, opacity 160ms ease;
+      opacity: 0;
+    }
+
     .queue-item.is-current {
-      background: linear-gradient(135deg, rgba(124,92,255,0.18), rgba(47,214,255,0.12));
-      border-color: rgba(96, 231, 255, 0.22);
-      box-shadow: 0 0 0 1px rgba(96, 231, 255, 0.09), 0 0 20px rgba(124, 92, 255, 0.12);
+      background: linear-gradient(135deg, rgba(124,92,255,0.2), rgba(47,214,255,0.14));
+      border-color: rgba(96, 231, 255, 0.24);
+      box-shadow: 0 0 0 1px rgba(96, 231, 255, 0.1), 0 10px 24px rgba(10, 16, 30, 0.26);
+    }
+
+    .queue-item.is-current::before {
+      background: var(--cyan);
+      box-shadow: 0 0 0 4px rgba(96, 231, 255, 0.12);
+      opacity: 1;
     }
 
     .queue-thumb {
-      width: 44px;
-      height: 44px;
+      width: 48px;
+      height: 48px;
       border-radius: 12px;
       display: grid;
       place-items: center;
@@ -965,6 +1020,7 @@
 
     .queue-title {
       font-weight: 700;
+      font-size: 0.96rem;
       line-height: 1.25;
       white-space: nowrap;
       overflow: hidden;
@@ -974,6 +1030,7 @@
     .queue-sub {
       color: var(--text-3);
       font-size: 0.84rem;
+      line-height: 1.35;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -1023,6 +1080,16 @@
 
     .help-drawer summary::-webkit-details-marker {
       display: none;
+    }
+
+    .help-drawer summary span:last-child,
+    .extra-drawer summary span:last-child {
+      transition: transform 160ms ease;
+    }
+
+    .help-drawer[open] summary span:last-child,
+    .extra-drawer[open] summary span:last-child {
+      transform: rotate(180deg);
     }
 
     .help-body {
@@ -1586,7 +1653,8 @@
           btn.type = 'button';
           btn.className = `queue-item${index === state.currentIndex ? ' is-current' : ''}`;
           btn.dataset.index = index;
-          btn.setAttribute('aria-label', `Play ${item.title}`);
+          btn.setAttribute('aria-label', `${index === state.currentIndex ? 'Current video' : 'Play'} ${item.title}`);
+          if (index === state.currentIndex) btn.setAttribute('aria-current', 'true');
 
           const thumb = item.thumbnail
             ? `<div class="queue-thumb"><img src="${item.thumbnail}" alt=""></div>`
@@ -1596,7 +1664,7 @@
             ${thumb}
             <div class="queue-meta">
               <div class="queue-title">${escapeHtml(item.title)}</div>
-              <div class="queue-sub">${escapeHtml(item.width && item.height ? `${item.width}×${item.height} • ${formatBytes(item.size)}` : formatBytes(item.size) || 'Local file')}</div>
+              <div class="queue-sub">${escapeHtml(item.width && item.height ? `${item.width}×${item.height} • ${formatBytes(item.size)}` : formatBytes(item.size) || 'Local file')}${index === state.currentIndex ? ' • now playing' : ''}</div>
             </div>
             <div class="queue-duration">${Number.isFinite(item.duration) ? formatTime(item.duration) : '—'}</div>
           `;
@@ -1630,6 +1698,8 @@
           els.video.removeAttribute('src');
           els.video.load();
           els.emptyState.hidden = false;
+          els.videoSurface.classList.remove('is-loaded', 'is-playing');
+          document.body.classList.remove('has-video');
           document.title = 'Pulse Video';
           updateNowPlaying();
           renderQueue();
@@ -1642,6 +1712,9 @@
         els.video.playbackRate = Number(els.speedSelect.value);
         els.video.style.objectFit = state.fitMode;
         els.emptyState.hidden = true;
+        els.videoSurface.classList.add('is-loaded');
+        els.videoSurface.classList.remove('is-playing');
+        document.body.classList.add('has-video');
         document.title = `${item.title} — Pulse Video`;
         updateNowPlaying();
         renderQueue();
@@ -1769,6 +1842,7 @@
         els.playPauseIcon.textContent = isPlaying ? '❚❚' : '▶';
         els.playPauseBtn.setAttribute('aria-label', isPlaying ? 'Pause' : 'Play');
         els.videoTapLayer.setAttribute('aria-label', isPlaying ? 'Pause video' : 'Play video');
+        els.videoSurface.classList.toggle('is-playing', isPlaying);
         updateNowPlaying();
       }
 
